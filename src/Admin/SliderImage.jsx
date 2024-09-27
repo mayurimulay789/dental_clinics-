@@ -1,121 +1,249 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchSliderImages, addSliderImage, deleteSliderImage } from '../redux/features/sliderImageSlice'
-import { Trash2, Upload, Eye } from 'lucide-react'
+import React, { useState, useEffect } from "react";
+import { Table, Button, Modal, Form, Input, Image } from "antd";
+import { toast } from "react-toastify";
+import Layout from "./Layout";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createSlider,
+  deleteSliderImage,
+  getAllSliderImages,
+  updateSlider,
+} from "../redux/action/slider";
+import { clearError, clearMessage } from "../redux/reducers/sliderReducer";
 
-export default function SliderImages() {
-  const dispatch = useDispatch()
-  const sliderImages = useSelector((state) => state.sliderImages.images)
-  const [newImage, setNewImage] = useState(null)
-  const [previewImage, setPreviewImage] = useState(null)
+const SliderImage = () => {
+  const [title, setTitle] = useState("");
+  const [image, setImage] = useState(null); // change initial state to null
+  const [avatar, setAvatar] = useState(""); // preview of image
+  const [currentImageBlob, setCurrentImageBlob] = useState(null); // store current image blob
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [editingSlider, setEditingSlider] = useState(null);
+
+  const { sliders, error, message } = useSelector((state) => state.slider);
+  const dispatch = useDispatch();
+
+  const deleteHandler = (sliderId) => {
+    dispatch(deleteSliderImage(sliderId));
+  };
 
   useEffect(() => {
-    dispatch(fetchSliderImages())
-  }, [dispatch])
-
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0]
-    setNewImage(file)
-  }
-
-  const handleAddImage = async () => {
-    if (newImage) {
-      await dispatch(addSliderImage(newImage))
-      setNewImage(null)
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
     }
-  }
+    if (message) {
+      toast.info(message);
+      dispatch(clearMessage());
+    }
 
-  const handleDeleteImage = (imageId) => {
-    dispatch(deleteSliderImage(imageId))
-  }
+    dispatch(getAllSliderImages());
+  }, [dispatch, error, message]);
 
-  const handlePreviewImage = (imageUrl) => {
-    setPreviewImage(imageUrl)
-  }
+  const columns = [
+    {
+      title: "Sr.No",
+      dataIndex: "sno",
+      key: "sno",
+      render: (text, record, index) => index + 1,
+    },
+    { title: "Title", dataIndex: "title", key: "title", width: 200 },
+    {
+      title: "Image",
+      dataIndex: "thumbnailImage",
+      key: "thumbnailImage",
+      render: (thumbnailImage) => (
+        <Image
+          width={50}
+          src={thumbnailImage?.url}
+          alt="Slider Image"
+          fallback="https://via.placeholder.com/50"
+        />
+      ),
+    },
+    {
+      title: "URL",
+      dataIndex: "thumbnailImage",
+      key: "thumbnailImage",
+      render: (thumbnailImage) => thumbnailImage.url,
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <span>
+          <Button type="link" onClick={() => handleEdit(record)}>
+            Edit
+          </Button>
+          <Button type="link" danger onClick={() => deleteHandler(record._id)}>
+            Delete
+          </Button>
+        </span>
+      ),
+    },
+  ];
+
+  const handleAddSliderImage = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+    setImage(null);
+    setAvatar("");
+    setCurrentImageBlob(null);
+    setEditingSlider(null);
+  };
+
+  const imageHandler = (e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onloadend = () => {
+      setAvatar(reader.result); // just for preview on screen
+      setImage(file); // database ke liye file ka blob
+    };
+  };
+
+  const handleSave = async () => {
+    try {
+      const myForm = new FormData();
+      myForm.append("title", title);
+      if (image) {
+        myForm.append("file", image);
+      } else if (currentImageBlob) {
+        myForm.append("file", currentImageBlob);
+      }
+
+      if (editingSlider) {
+        // Update existing slider image
+        dispatch(updateSlider(myForm, editingSlider._id));
+      } else {
+        // Add new slider image
+        dispatch(createSlider(myForm));
+      }
+
+      setIsModalVisible(false);
+      form.resetFields();
+      setImage(null);
+      setAvatar("");
+      setCurrentImageBlob(null);
+      setEditingSlider(null);
+    } catch (error) {
+      console.error("Error saving slider image:", error);
+    }
+  };
+
+  const handleEdit = (record) => {
+    setEditingSlider(record);
+    setTitle(record.title);
+    setAvatar(record.thumbnailImage.url);
+
+    // Convert the URL to a blob
+    fetch(record.thumbnailImage.url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        setCurrentImageBlob(blob);
+      });
+
+    setIsModalVisible(true);
+    form.setFieldsValue({
+      title: record.title,
+    });
+  };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow dark:bg-gray-800">
-      <h2 className="mb-4 text-2xl font-bold">Slider Images</h2>
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
-            <tr>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                Preview
-              </th>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                Image URL
-              </th>
-              <th className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-gray-300">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-            {sliderImages.map((image) => (
-              <tr key={image._id}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <img src={image.url} alt="Slider" className="object-cover w-20 h-20 rounded" />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900 dark:text-gray-100">{image.url}</div>
-                </td>
-                <td className="px-6 py-4 text-sm font-medium whitespace-nowrap">
-                  <button
-                    onClick={() => handlePreviewImage(image.url)}
-                    className="mr-4 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
-                  >
-                    <Eye className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => handleDeleteImage(image._id)}
-                    className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex items-center mt-6">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="hidden"
-          id="image-upload"
-        />
-        <label
-          htmlFor="image-upload"
-          className="inline-flex items-center px-4 py-2 text-white transition-colors duration-200 bg-blue-500 rounded cursor-pointer hover:bg-blue-600"
-        >
-          <Upload className="w-5 h-5 mr-2" />
-          Upload New Image
-        </label>
-        {newImage && (
-          <button
-            onClick={handleAddImage}
-            className="px-4 py-2 ml-4 text-white transition-colors duration-200 bg-green-500 rounded hover:bg-green-600"
+    <Layout>
+      <div className="flex-1 p-5 bg-white">
+        <div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1rem",
+            }}
           >
-            Add Image
-          </button>
-        )}
-      </div>
-      {previewImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="max-w-3xl max-h-full p-4 overflow-auto bg-white rounded-lg">
-            <img src={previewImage} alt="Preview" className="h-auto max-w-full" />
-            <button
-              onClick={() => setPreviewImage(null)}
-              className="px-4 py-2 mt-4 text-white transition-colors duration-200 bg-red-500 rounded hover:bg-red-600"
-            >
-              Close Preview
-            </button>
+            <h2 className="font-bold">
+              ALL SLIDING IMAGES{" "}
+              <span>(1920x1080 pixels images are preferred)</span>
+            </h2>
+            <Button type="primary" onClick={handleAddSliderImage}>
+              + Add Sliding Image
+            </Button>
           </div>
+          <Table
+            dataSource={sliders}
+            columns={columns}
+            pagination={{ pageSize: 10 }}
+            rowKey="_id"
+            defaultSortOrder="ascend"
+          />
+
+          <Modal
+            title={editingSlider ? "Edit Slider Image" : "Add Slider Image"}
+            visible={isModalVisible}
+            onCancel={handleCancel}
+            footer={[
+              <Button key="cancel" onClick={handleCancel}>
+                Cancel
+              </Button>,
+              <Button key="save" type="primary" onClick={handleSave}>
+                Save
+              </Button>,
+            ]}
+          >
+            <Form form={form} layout="vertical">
+              <Form.Item
+                name="title"
+                label="Title"
+                rules={[
+                  { required: true, message: "Please enter the title!" },
+                ]}
+              >
+                <Input
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="Enter Title"
+                />
+              </Form.Item>
+              <Form.Item
+                name="image"
+                label="Slider Image"
+                rules={[
+                  { required: true, message: "Please upload an image!" },
+                ]}
+              >
+                <input
+                  id="chooseAvatar"
+                  name="chooseAvatar"
+                  type="file"
+                  accept="image/*"
+                  required={!editingSlider}
+                  onChange={imageHandler}
+                  className="block w-full px-3 py-2 mt-1 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-yellow-500 focus:border-yellow-500 sm:text-sm"
+                />
+                {avatar && (
+                  <img
+                    src={avatar}
+                    alt="Slider Image"
+                    style={{
+                      marginTop: "10px",
+                      width: "100px",
+                      height: "100px",
+                    }}
+                  />
+                )}
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
-      )}
-    </div>
-  )
-}
+      </div>
+    </Layout>
+  );
+};
+
+export default SliderImage;

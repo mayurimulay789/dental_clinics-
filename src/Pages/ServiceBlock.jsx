@@ -10,6 +10,7 @@ import image4 from '../assets/service-4.jpg';
 const services = [image1, image2, image3, image4];
 
 export default function BlockSection() {
+
   const [hoveredCard, setHoveredCard] = useState(null);
 
   return (

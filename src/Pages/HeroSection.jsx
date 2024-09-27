@@ -1,27 +1,34 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, Col, Row } from 'antd';
+import { useEffect, useState } from 'react';
+import { Card, Col, Row } from 'antd';
 import doctor from '../assets/carousel-1.jpg'; // Adjust the path if needed
-import { setServices } from '../redux/features/serviceSlice';
 
 export default function HeroSection() {
-  const dispatch = useDispatch();
-  const services = useSelector((state) => state.services.services);
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
-    // Fetch services from the backend
-    const fetchServices = async () => {
-      try {
-        const response = await fetch('/api/services');
-        const data = await response.json();
-        dispatch(setServices(data));
-      } catch (error) {
-        console.error('Failed to fetch services:', error);
-      }
-    };
+    // Static services data
+    const staticServices = [
+      {
+        title: 'Teeth Whitening',
+        image: 'https://via.placeholder.com/300', // Example image URL
+      },
+      {
+        title: 'Dental Implants',
+        image: 'https://via.placeholder.com/300',
+      },
+      {
+        title: 'Orthodontics',
+        image: 'https://via.placeholder.com/300',
+      },
+      {
+        title: 'Root Canal Treatment',
+        image: 'https://via.placeholder.com/300',
+      },
+    ];
 
-    fetchServices();
-  }, [dispatch]);
+    // Set static services
+    setServices(staticServices);
+  }, []);
 
   return (
     <div className="py-16 bg-gray-100">

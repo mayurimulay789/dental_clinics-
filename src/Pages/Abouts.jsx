@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { CheckCircle, Smile } from 'lucide-react'
-import image from '../assets/about.jpg'
+import image from '../assets/pp.jpg'
 const features = [
   { id: 1, text: 'Award Winning' },
   { id: 2, text: 'Professional Staff' },

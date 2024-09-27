@@ -55,9 +55,10 @@ export default function ContactPage() {
 
           {/* Contact Form */}
           <Card title="Contact Us" bordered={false}>
-            <Form
+            <Form action='https://formspree.io/f/xzzpndlb' method='POST'
               layout="vertical"
               onFinish={handleSubmit}
+              
               className="space-y-4"
             >
               <Form.Item
@@ -88,7 +89,7 @@ export default function ContactPage() {
                 <Input.TextArea rows={4} />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" className="w-full">
+                <Button type="primary" htmlType="submit" value="send" className="w-full">
                   Send Message
                 </Button>
               </Form.Item>

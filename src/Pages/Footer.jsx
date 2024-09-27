@@ -43,10 +43,11 @@ export default function Footer() {
           <div className="animate-fadeIn">
             <h3 className="mb-4 text-xl font-semibold text-white">Quick Links</h3>
             <ul className="space-y-2 text-gray-200">
-              <li><a href="#" className="hover:text-gray-100">About Us</a></li>
-              <li><a href="#" className="hover:text-gray-100">Services</a></li>
-              <li><a href="#" className="hover:text-gray-100">Appointments</a></li>
-              <li><a href="#" className="hover:text-gray-100">Contact</a></li>
+              <li><a href="/about" className="hover:text-gray-100">About Us</a></li>
+              <li><a href="/service" className="hover:text-gray-100">Service</a></li>
+              <li><a href="/appointments" className="hover:text-gray-100">Appointments</a></li>
+              <li><a href="/contact" className="hover:text-gray-100">Contact</a></li>
+              <li><a href="/blog" className="hover:text-gray-100">Blog</a></li>
             </ul>
           </div>
 

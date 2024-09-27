@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { FaTooth, FaUsers, FaClock, FaAward } from 'react-icons/fa'
-import image from '../assets/carousel-2.jpg'
+import image from '../assets/ppc.jpg'
 const features = [
   { icon: <FaTooth className="w-6 h-6" />, title: 'Expert Dentists', description: 'Our team of highly skilled dentists ensures top-quality care.' },
   { icon: <FaUsers className="w-6 h-6" />, title: 'Patient-Centered', description: 'We prioritize your comfort and satisfaction above all else.' },
