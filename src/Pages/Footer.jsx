@@ -14,13 +14,13 @@ export default function Footer() {
 
       {/* Footer Content */}
       <div className="px-4 pt-24 pb-12 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           
           {/* About Us Section */}
-          <div className="animate-fadeIn">
+          <div className="flex flex-col animate-fadeIn">
             <h3 className="mb-4 text-2xl font-bold text-white">Smile Bright Dental</h3>
             <p className="mb-4 text-gray-200">Providing top-quality dental care with a gentle touch. Your smile is our priority!</p>
-            <div className="flex space-x-4">
+            <div className="flex mt-auto space-x-4">
               <a href="#" className="transition-colors duration-300 hover:text-gray-200">
                 <FaFacebook size={24} />
               </a>
@@ -40,7 +40,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div className="animate-fadeIn">
+          <div className="flex flex-col animate-fadeIn">
             <h3 className="mb-4 text-xl font-semibold text-white">Quick Links</h3>
             <ul className="space-y-2 text-gray-200">
               <li><a href="/about" className="hover:text-gray-100">About Us</a></li>
@@ -52,7 +52,7 @@ export default function Footer() {
           </div>
 
           {/* Contact Information */}
-          <div className="animate-fadeIn">
+          <div className="flex flex-col animate-fadeIn">
             <h3 className="mb-4 text-xl font-semibold text-white">Contact Information</h3>
             <ul className="space-y-2 text-gray-200">
               <li className="flex items-center space-x-2">
@@ -68,18 +68,6 @@ export default function Footer() {
                 <span>info@smilebright.com</span>
               </li>
             </ul>
-          </div>
-
-          {/* Newsletter Subscription */}
-          <div className="animate-fadeIn">
-            <h3 className="mb-4 text-xl font-semibold text-white">Subscribe to Our Newsletter</h3>
-            <p className="mb-4 text-gray-200">Get the latest updates and offers directly in your inbox!</p>
-            <div className="flex space-x-2">
-              <input type="email" placeholder="Enter your email" className="w-full px-4 py-2 text-gray-800 rounded-md" />
-              <button className="px-4 py-2 font-semibold text-white rounded-md bg-emerald-600 hover:bg-emerald-700">
-                Subscribe
-              </button>
-            </div>
           </div>
 
         </div>

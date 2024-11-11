@@ -4,7 +4,6 @@ import MainLayout from "./Pages/MainLayout";
 import Footer from "./Pages/Footer";
 import About from "./Pages/About";
 import Contact from "./Pages/Contact";
-import Blog from "./Pages/Blog";
 import Home from './Pages/Home.jsx';
 import BookAppointment from "./Pages/BookAppointment";
 import Service from "./Pages/Service";
@@ -23,7 +22,9 @@ import SliderImage from './Admin/SliderImage'
 import UserManagement from './Admin/UserMangement.jsx';
 import AdminDashboard from './Admin/AdminDashboard';
 import Appointment from './Admin/Appointment.jsx';
-
+import Blog from './Admin/Blog.jsx';
+import Blogs from './Pages/Blogs.jsx';
+import Post from './Pages/Post.jsx';
 function App() {
    // Checking user state
   const { isAuthenticated, user, error, message } = useSelector(
@@ -62,6 +63,7 @@ function App() {
               <Route path="/admin/youtubeshorts" element={<YoutubeShorts/>} />
               <Route path="/admin/usermanagement" element={<UserManagement/>}/>
               <Route path="/admin/appointment" element={<Appointment/>}/>
+              <Route path="/admin/blog" element={<Blog/>}/>
 
             </>
           ) : isAuthenticated ? (
@@ -76,9 +78,10 @@ function App() {
            <Route path="/about" element={<><Navbar /><About /><Footer /></>} />
            <Route path="/service" element={<><Navbar /><Service /><Footer /></>} />
            <Route path="/contact" element={<><Navbar /><Contact /><Footer /></>} />           
-           <Route path="/blog" element={<><Navbar /><Blog /><Footer /></>} />           
+           <Route path="/blogs" element={<><Navbar /><Blogs/><Footer /></>} />           
            <Route path="/appointment" element={<><Navbar /><Appointment /><Footer /></>} />
-          
+           <Route path="/post/:id" element={<><Navbar /><Post /><Footer /></>} />
+
               {/* <Route path="food" element={<Food />}>
                 <Route path="/food/restaruant" element={<Restaurant />}></Route>
                 <Route path="/food/streetfood" element={<StreetFood />}></Route>
@@ -127,9 +130,10 @@ function App() {
            <Route path="/about" element={<><Navbar /><About /><Footer /></>} />
            <Route path="/service" element={<><Navbar /><Service /><Footer /></>} />
            <Route path="/contact" element={<><Navbar /><Contact /><Footer /></>} />           
-           <Route path="/blog" element={<><Navbar /><Blog /><Footer /></>} />           
+           <Route path="/blogs" element={<><Navbar /><Blogs /><Footer /></>} />           
            <Route path="/bookappointment" element={<><Navbar /><BookAppointment /><Footer /></>} />
-          
+           <Route path="/post/:id" element={<><Navbar /><Post /><Footer /></>} />
+
               {/* Dynamic Route */}
               {/* <Route path="/:title" element={<DynamicPage />} /> */}
 

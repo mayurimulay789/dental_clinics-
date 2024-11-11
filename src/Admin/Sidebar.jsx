@@ -84,9 +84,9 @@ const Sidebar = () => {
     {
       key: '/admin/blog',
       icon: <MessageOutlined />,
-      label: 'blog',
+      label: 'blogsection',
       to: '/admin/blog',
-      permission: 'blog',
+      permission: 'Blog',
     },
   ];
 

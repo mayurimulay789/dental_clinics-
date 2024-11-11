@@ -137,6 +137,7 @@ const UserManagement = () => {
     "SliderImage",    
     "UserManagement",
     "Appointment",
+    "BlogSection"
   ];
 
   return (

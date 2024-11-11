@@ -13,14 +13,14 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
     { name: 'Service', path: '/service' },
-    { name: 'Blog', path: '/blog' },
+    { name: 'Blogs', path: '/blogs' },
     { name: 'Contact', path: '/contact' },
   ];
 
   return (
     <>
       <header className="bg-white shadow-lg">
-        <nav className="container mx-auto px-4 py-4 sm:px-6 md:px-8 lg:px-12">
+        <nav className="container px-4 py-4 mx-auto sm:px-6 md:px-8 lg:px-12">
           <div className="flex items-center justify-between">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -93,9 +93,9 @@ const Navbar = () => {
 
       {showAppointmentForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg w-11/12 md:w-1/2 lg:w-1/3">
+          <div className="w-11/12 p-8 bg-white rounded-lg md:w-1/2 lg:w-1/3">
             <button
-              className="text-red-500 mb-4 float-right"
+              className="float-right mb-4 text-red-500"
               onClick={() => setShowAppointmentForm(false)} // Close the form
             >
               Close
